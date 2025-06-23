@@ -96,13 +96,13 @@ uvicorn fuzzy-search-service:app --reload
 #### Build image
 
 ```bash
-docker build -t fuzzy-search-service .
+docker build -t fuzzy_search_service .
 ```
 
 #### Run container
 
 ```bash
-docker run -p 8000:8000 fuzzy-search-service
+docker run -p 8000:8000 fuzzy_search_service
 ```
 
 Healthcheck available at:
