@@ -1,4 +1,4 @@
-# Fuzzy Search Service with AI Help
+# Fuzzy Search Service
 
 This project provides a simple REST API for fuzzy string matching using FastAPI and RapidFuzz.
 It accepts a search string and a list of candidate values, and returns the top 10 most similar matches ranked by similarity score.
@@ -88,7 +88,7 @@ cd <repository>
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-uvicorn app:app --reload
+uvicorn fuzzy-search-service:app --reload
 ```
 
 ### 2️⃣ Docker

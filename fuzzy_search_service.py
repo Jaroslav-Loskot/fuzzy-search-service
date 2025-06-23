@@ -60,8 +60,8 @@ async def help_service():
                 {"value": "appl", "score": 90.0}
             ]
         },
-        "note": "The main application file is named 'fuzzy-search-service.py'"
+        "note": "The main application file is named 'fuzzy_search_service.py'"
     }
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("fuzzy_search_service:app", host="0.0.0.0", port=8000)
