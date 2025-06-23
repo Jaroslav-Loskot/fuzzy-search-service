@@ -20,7 +20,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY app.py .
+COPY fuzzy_search_service.py .
 
 # Expose port
 EXPOSE 8000
@@ -31,4 +31,3 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 
 # Run the FastAPI app using uvicorn
 CMD ["uvicorn", "fuzzy_search_service:app", "--host", "0.0.0.0", "--port", "8000"]
-
