@@ -30,7 +30,7 @@ class SearchRequest(BaseModel):
 
 class SearchResult(BaseModel):
     value: str
-    score: int  # Truncated score
+    score: float  # One decimal place
 
 class SearchResponse(BaseModel):
     results: List[SearchResult]
@@ -52,7 +52,7 @@ async def fuzzy_search(request: SearchRequest):
     )
 
     response = SearchResponse(
-        results=[SearchResult(value=match[0], score=int(match[1])) for match in matches]
+        results=[SearchResult(value=match[0], score=round(match[1], 1)) for match in matches]
     )
     return response
 
@@ -72,7 +72,7 @@ async def help_service():
         },
         "scorers": SCORER_DESCRIPTIONS,
         "output_format": {
-            "results": [{"value": "Matched string", "score": "Similarity score (0-100) as integer"}]
+            "results": [{"value": "Matched string", "score": "Similarity score (0-100) with one decimal place"}]
         },
         "example_input": {
             "searched_string": "apple",
@@ -81,8 +81,8 @@ async def help_service():
         },
         "example_output": {
             "results": [
-                {"value": "apple pie", "score": 95},
-                {"value": "appl", "score": 90}
+                {"value": "apple pie", "score": 95.0},
+                {"value": "appl", "score": 90.0}
             ]
         },
         "note": "The main application file is named 'fuzzy_search_service.py'"

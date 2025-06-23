@@ -88,8 +88,8 @@ curl -X POST http://localhost:8000/fuzzy_search \
 ```json
 {
   "results": [
-    { "value": "apple pie", "score": 95 },
-    { "value": "appl", "score": 90 }
+    { "value": "apple pie", "score": 95.2 },
+    { "value": "appl", "score": 90.1 }
   ]
 }
 ```
@@ -134,8 +134,6 @@ docker-compose up
 ## Docker Compose (Example)
 
 ```yaml
-version: "3.9"
-
 services:
   fuzzy-search-service:
     build: .
@@ -175,3 +173,5 @@ http://fuzzy-search-service:8000/fuzzy_search
 ## License
 
 MIT License
+
+---
