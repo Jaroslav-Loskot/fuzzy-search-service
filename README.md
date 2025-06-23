@@ -1,14 +1,18 @@
 # Fuzzy Search Service
 
-This project provides a simple REST API for fuzzy string matching using FastAPI and RapidFuzz.
+This project provides a REST API for fuzzy string matching using FastAPI and RapidFuzz.
 It accepts a search string and a list of candidate values, and returns the top 10 most similar matches ranked by similarity score.
+
+---
 
 ## Features
 
-* 🚀 Fast fuzzy matching using `rapidfuzz`
+* 🔎 Multiple fuzzy search algorithms (`WRatio`, `ratio`, `partial_ratio`, `token_sort_ratio`, `token_set_ratio`)
 * 🩺 Docker healthcheck endpoint
-* 🤖 AI-style self-documentation via `/help` endpoint
-* ⚡ Lightweight FastAPI backend
+* 🤖 Self-documenting `/help` endpoint
+* ⚡ Lightweight FastAPI backend with Docker support
+
+---
 
 ## API Endpoints
 
@@ -21,57 +25,71 @@ Perform fuzzy search.
 ```json
 {
   "searched_string": "string",
-  "searched_values": ["value1", "value2", "value3"]
+  "searched_values": ["value1", "value2", "value3"],
+  "scorer": "WRatio"  // Optional, default is WRatio
 }
 ```
+
+✅ Available scorers:
+
+* `WRatio` (default)
+* `ratio`
+* `partial_ratio`
+* `token_sort_ratio`
+* `token_set_ratio`
 
 #### Response
 
 ```json
 {
   "results": [
-    { "value": "closest match", "score": 95.0 },
+    { "value": "matched string", "score": 95 },
     ...
   ]
 }
 ```
 
+---
+
 ### `GET /health`
 
-Returns service health status:
+Simple health check.
+
+Response:
 
 ```json
 { "status": "ok" }
 ```
 
+---
+
 ### `GET /help`
 
-Returns service description, input format, and examples.
+Returns full service description with input/output examples.
 
 ---
 
 ## Example Usage
 
-### Request
+### Example Request
 
 ```bash
 curl -X POST http://localhost:8000/fuzzy_search \
 -H "Content-Type: application/json" \
 -d '{
   "searched_string": "apple",
-  "searched_values": ["apple pie", "appl", "pineapple", "banana"]
+  "searched_values": ["apple pie", "appl", "pineapple", "banana"],
+  "scorer": "token_sort_ratio"
 }'
 ```
 
-### Response
+### Example Response
 
 ```json
 {
   "results": [
-    { "value": "apple pie", "score": 95.0 },
-    { "value": "appl", "score": 90.0 },
-    { "value": "pineapple", "score": 77.0 },
-    { "value": "banana", "score": 27.0 }
+    { "value": "apple pie", "score": 95 },
+    { "value": "appl", "score": 90 }
   ]
 }
 ```
@@ -88,39 +106,68 @@ cd <repository>
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-uvicorn fuzzy-search-service:app --reload
+uvicorn fuzzy_search_service:app --reload
 ```
 
 ### 2️⃣ Docker
 
-#### Build image
+#### Build Docker image
 
 ```bash
-docker build -t fuzzy_search_service .
+docker build -t fuzzy-search-service .
 ```
 
 #### Run container
 
 ```bash
-docker run -p 8000:8000 fuzzy_search_service
+docker run -p 8000:8000 fuzzy-search-service
 ```
 
-Healthcheck available at:
-`http://localhost:8000/health`
+#### Or via Docker Compose (if you have multiple services):
+
+```bash
+docker-compose up
+```
 
 ---
 
-## Dependencies
+## Docker Compose (Example)
 
-* `fastapi`
-* `uvicorn[standard]`
-* `rapidfuzz`
-* `pydantic`
+```yaml
+version: "3.9"
 
-Install them via:
+services:
+  fuzzy-search-service:
+    build: .
+    ports:
+      - "8002:8000"
+    networks:
+      - supabase_default
+
+networks:
+  supabase_default:
+    external: true
+```
+
+*Inside Docker network, call it via:*
+
+```
+http://fuzzy-search-service:8000/fuzzy_search
+```
+
+---
+
+## Project Structure
 
 ```bash
-pip install fastapi uvicorn[standard] rapidfuzz
+.
+├── fuzzy_search_service.py  # Main application code
+├── requirements.txt
+├── Dockerfile
+├── .dockerignore
+├── .gitignore
+├── README.md
+└── docker-compose.yml
 ```
 
 ---
@@ -128,5 +175,3 @@ pip install fastapi uvicorn[standard] rapidfuzz
 ## License
 
 MIT License
-
----
