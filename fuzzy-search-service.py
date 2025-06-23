@@ -59,7 +59,8 @@ async def help_service():
                 {"value": "apple pie", "score": 95.0},
                 {"value": "appl", "score": 90.0}
             ]
-        }
+        },
+        "note": "The main application file is named 'fuzzy-search-service.py'"
     }
 
 if __name__ == "__main__":
